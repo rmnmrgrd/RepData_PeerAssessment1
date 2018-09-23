@@ -84,7 +84,7 @@ The mean of steps (marked in red) is 9354.2295082, while the median (marked in b
 
 ```r
 davg <- d %>% group_by(interval) %>% summarise(avg=mean(steps, na.rm=TRUE))
-plot(davg$interval, davg$avg, type="l", xlab="Interval")
+plot(davg$interval, davg$avg, type="l", xlab="Interval", ylab="Average number of steps")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
@@ -140,7 +140,7 @@ d2$weekday <- as.factor(d2$weekday)
 
 ```r
 davg2 <- d2 %>% group_by(interval) %>% summarise(avg=mean(steps)) 
-plot(davg2$interval, davg2$avg, type="l", xlab="Interval")
+plot(davg2$interval, davg2$avg, type="l", xlab="Interval", ylab="Average number of steps")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
@@ -161,16 +161,6 @@ abline(v=median2, col="blue", lwd=2)
 
 ![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
-
-```r
-#mean2 <- mean(d2$steps)
-#median2 <- median(d2$steps)
-
-#hist(d2$steps, xlab="Steps", main="Histogram of steps taken each day", breaks=30)
-#abline(v=mean2, col="red", lwd=2)
-#abline(v=median2, col="blue", lwd=2)
-```
-
 The mean of steps is 9354.2295082, while the median is 10395. 
 
 
@@ -186,4 +176,4 @@ davg.weekdays <- d2 %>% group_by(interval, weekday) %>% summarise(avg=mean(steps
 xyplot(avg ~ interval | weekday, davg.weekdays, layout=c(1,2), xlab="Interval", ylab="Number of steps", type="l")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
