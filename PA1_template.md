@@ -63,18 +63,21 @@ d <- read.csv(unz("activity.zip", "activity.csv"))
 
 ### Histogram of steps
 
-```r
-mean1 <- mean(d$steps, na.rm=TRUE)
-median1 <- median(d$steps, na.rm=TRUE)
 
-hist(d$steps, xlab="Steps", main="Histogram of steps", breaks=30)
+```r
+stepsperday <- d %>% group_by(date) %>% summarise(steps = sum(steps, na.rm=TRUE))
+
+mean1 <- mean(stepsperday$steps, na.rm=TRUE)
+median1 <- median(stepsperday$steps, na.rm=TRUE)
+
+hist(stepsperday$steps, xlab="Steps", main="Histogram of steps", breaks=30)
 abline(v=mean1, col="red", lwd=2)
 abline(v=median1, col="blue", lwd=2)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
-The mean of steps (marked in red) is 37.3825996, while the median (marked in blue) is 0.
+The mean of steps (marked in red) is 9354.2295082, while the median (marked in blue) is 10395.
 
 
 ## What is the average daily activity pattern?
@@ -122,7 +125,7 @@ mean(is.na(d$steps))
 ```
 Around 13% of the values are NA.
 
-Let's imput them by calculating the mean for that 5-minute interval.
+Let's imput them by calculating the mean for that 5-minute interval. We also mark each day as "weekday" or "weekend".
 
 
 ```r
@@ -144,21 +147,34 @@ plot(davg2$interval, davg2$avg, type="l", xlab="Interval")
 
 
 
-```r
-mean2 <- mean(d2$steps)
-median2 <- median(d2$steps)
 
-hist(d2$steps, xlab="Steps", main="Histogram of steps taken each day", breaks=30)
+```r
+stepsperday2 <- d2 %>% group_by(date) %>% summarise(steps = sum(steps))
+
+mean2 <- mean(stepsperday$steps, na.rm=TRUE)
+median2 <- median(stepsperday$steps, na.rm=TRUE)
+
+hist(stepsperday2$steps, xlab="Steps", main="Histogram of steps", breaks=30)
 abline(v=mean2, col="red", lwd=2)
 abline(v=median2, col="blue", lwd=2)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
-The mean of steps is 37.3825996, while the median is 0.
+
+```r
+#mean2 <- mean(d2$steps)
+#median2 <- median(d2$steps)
+
+#hist(d2$steps, xlab="Steps", main="Histogram of steps taken each day", breaks=30)
+#abline(v=mean2, col="red", lwd=2)
+#abline(v=median2, col="blue", lwd=2)
+```
+
+The mean of steps is 9354.2295082, while the median is 10395. 
 
 
-We can see no difference after imputting missing values as the method follow to imput them has been to calculate the average of the non-empty values for that particular interval, which, or course, does not change the average per interval.
+We can see no difference after imputting missing values as the method follow to imput them has been to calculate the average of the non-empty values for that particular interval, which, or course, does not change the average per interval. Of course, the frequencies in the histogram are higher than in the first one, due to the imputting of missing values.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -167,7 +183,7 @@ From the charts below it can be seen that activity starts somewhat later during 
 
 ```r
 davg.weekdays <- d2 %>% group_by(interval, weekday) %>% summarise(avg=mean(steps)) 
-xyplot(avg ~ interval | weekday, davg.weekdays, layout=c(1,2), xlab="Interval", ylab="Number of steps")
+xyplot(avg ~ interval | weekday, davg.weekdays, layout=c(1,2), xlab="Interval", ylab="Number of steps", type="l")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
